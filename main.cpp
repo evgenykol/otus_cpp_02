@@ -5,14 +5,23 @@
 #include <vector>
 #include <fstream>
 #include <cassert>
+#include <tuple>
 
 #include "ip_filter.h"
+
+void print_ips(std::vector<std::uint32_t> &ip)
+{
+    for(auto i : ip)
+    {
+        std::cout << ip_to_str(i) << std::endl;
+    }
+}
 
 int main(int argc, char const *argv[])
 {
     try
     {
-        std::vector<std::vector<std::string> > ip_pool;
+        std::vector<std::uint32_t> ip_pool;
 
 #ifdef NDEBUG
         for(std::string line; std::getline(std::cin, line);)
@@ -20,28 +29,29 @@ int main(int argc, char const *argv[])
         std::fstream f;
         f.open("ip_filter.tsv", std::fstream::in);
 
+        if (!f.is_open())
+        {
+            std::cout << "File opening error" << std::endl;
+        }
+
         for(std::string line; std::getline(f, line);)
 #endif
         {
             std::vector<std::string> v = split(line, '\t');
-            ip_pool.push_back(split(v.at(0), '.'));
+            auto ip = ip_to_int(split(v.at(0), '.'));
+            ip_pool.push_back(ip);
         }
 
         // TODO reverse lexicographically sort
+        std::sort(ip_pool.begin(), ip_pool.end(), std::greater<std::uint32_t>());
 
-        for(std::vector<std::vector<std::string> >::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip)
+        print_ips(ip_pool);
+
+        /*auto filter_by_first_1 = [](const std::uint32_t ip)
         {
-            for(std::vector<std::string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part)
-            {
-                if (ip_part != ip->cbegin())
-                {
-                    std::cout << ".";
-
-                }
-                std::cout << *ip_part;
-            }
-            std::cout << std::endl;
-        }
+            return ((ip & 0xFF000000) == 0x01000000);
+        };
+        std::vector<std::uint32_t> v1 = filter(ip_pool, filter_by_first_1);*/
 
         // 222.173.235.246
         // 222.130.177.64

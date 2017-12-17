@@ -1,11 +1,5 @@
-#include <cassert>
-#include <cstdlib>
-#include <iostream>
 #include <string>
 #include <vector>
-#include <fstream>
-#include <cassert>
-
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -17,8 +11,8 @@ std::vector<std::string> split(const std::string &str, char d)
 {
     std::vector<std::string> r;
 
-    std::string::size_type start = 0;
-    std::string::size_type stop = str.find_first_of(d);
+    auto start = 0;
+    auto stop = str.find_first_of(d);
     while(stop != std::string::npos)
     {
         r.push_back(str.substr(start, stop - start));
@@ -32,4 +26,35 @@ std::vector<std::string> split(const std::string &str, char d)
     return r;
 }
 
+std::uint32_t ip_to_int(std::vector<std::string> ip_str)
+{
+    std::uint32_t ip_int = 0;
+    for(auto i = 0; i < 4; ++i)
+    {
+        ip_int += (std::stoi(ip_str.at(i)) & 0xFF) << 8*(3-i);
+    }
+    return ip_int;
+}
 
+std::string ip_to_str(std::uint32_t ip_int)
+{
+    std::string ip_str = std::to_string((ip_int & 0xFF000000) >> 24);
+    ip_str += "." + std::to_string((ip_int & 0xFF0000) >> 16);
+    ip_str += "." + std::to_string((ip_int & 0xFF00) >> 8);
+    ip_str += "." + std::to_string((ip_int & 0xFF));
+    return ip_str;
+}
+
+template<typename Filter>
+std::vector<std::uint32_t> filter(std::vector<std::uint32_t> src, Filter flt)
+{
+    std::vector<std::uint32_t> filtered;
+
+    for(auto ip : src)
+    {
+        if (flt(ip))
+            filtered.push_back(ip);
+    }
+
+    return filtered;
+}

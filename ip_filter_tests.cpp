@@ -46,4 +46,31 @@ BOOST_AUTO_TEST_CASE(check_split)
     BOOST_CHECK(v6.at(1) == "22");
 }
 
+BOOST_AUTO_TEST_CASE(check_ip_to_int)
+{
+//std::uint32_t ip_to_int(std::vector<std::string> &ip_str)
+
+    std::vector<std::string> v1 = {"0", "0", "0", "0"};
+    BOOST_CHECK(ip_to_int(v1) == 0x0);
+
+    std::vector<std::string> v2 = {"255", "255", "255", "255"};
+    BOOST_CHECK(ip_to_int(v2) == 0xffffffff);
+
+    std::vector<std::string> v3 = {"1", "2", "3", "4"};
+    BOOST_CHECK(ip_to_int(v3) == 0x01020304);
+
+    std::vector<std::string> v4 = {"222", "173", "235", "246"};
+    BOOST_CHECK(ip_to_int(v4) == 0xdeadebf6);
+
+}
+
+BOOST_AUTO_TEST_CASE(check_ip_to_str)
+{
+    //std::string ip_to_str(std::uint32_t ip_int)
+    BOOST_CHECK(ip_to_str(0x0) == "0.0.0.0");
+    BOOST_CHECK(ip_to_str(0xFFFFFFFF) == "255.255.255.255");
+    BOOST_CHECK(ip_to_str(0x01020304) == "1.2.3.4");
+    BOOST_CHECK(ip_to_str(0xdeadebf6) == "222.173.235.246");
+}
+
 BOOST_AUTO_TEST_SUITE_END()

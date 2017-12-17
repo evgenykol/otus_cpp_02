@@ -49,3 +49,5 @@ include (CPack)
 enable_testing()
 
 add_test(check_split ip_filter_tests)
+add_test(check_ip_to_int ip_filter_tests)
+add_test(check_ip_to_str ip_filter_tests)
