@@ -1,5 +1,4 @@
-#include <string>
-#include <vector>
+#include "ip_filter.h"
 
 // ("",  '.') -> [""]
 // ("11", '.') -> ["11"]
@@ -45,7 +44,7 @@ std::string ip_to_str(std::uint32_t ip_int)
     return ip_str;
 }
 
-template<typename Filter>
+/*template<typename Filter>
 std::vector<std::uint32_t> filter(std::vector<std::uint32_t> src, Filter flt)
 {
     std::vector<std::uint32_t> filtered;
@@ -57,4 +56,4 @@ std::vector<std::uint32_t> filter(std::vector<std::uint32_t> src, Filter flt)
     }
 
     return filtered;
-}
+}*/
