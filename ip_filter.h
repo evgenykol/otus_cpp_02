@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <string>
+#include <cstdint>
+
 
 std::vector<std::string> split(const std::string &str, char d);
 std::uint32_t ip_to_int(std::vector<std::string> ip_str);
