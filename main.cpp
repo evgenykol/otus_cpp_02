@@ -6,6 +6,7 @@
 #include <fstream>
 #include <cassert>
 #include <tuple>
+#include <algorithm>
 
 #include "ip_filter.h"
 
