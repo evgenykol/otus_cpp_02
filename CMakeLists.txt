@@ -16,6 +16,7 @@ set_target_properties(ip_filter ip_filter_tests
         PROPERTIES
                 CXX_STANDARD 14
                 CXX_STANDARD_REQUIRED ON
+                CMAKE_CXX_EXTENSIONS OFF
                 COMPILE_OPTIONS -Wpedantic -Wall -Wextra
 )
 
