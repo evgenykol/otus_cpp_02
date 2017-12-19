@@ -44,16 +44,4 @@ std::string ip_to_str(std::uint32_t ip_int)
     return ip_str;
 }
 
-/*template<typename Filter>
-std::vector<std::uint32_t> filter(std::vector<std::uint32_t> src, Filter flt)
-{
-    std::vector<std::uint32_t> filtered;
 
-    for(auto ip : src)
-    {
-        if (flt(ip))
-            filtered.push_back(ip);
-    }
-
-    return filtered;
-}*/

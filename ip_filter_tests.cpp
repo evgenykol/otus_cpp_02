@@ -73,4 +73,23 @@ BOOST_AUTO_TEST_CASE(check_ip_to_str)
     BOOST_CHECK(ip_to_str(0xdeadebf6) == "222.173.235.246");
 }
 
+BOOST_AUTO_TEST_CASE(check_filter)
+{
+    std::vector<std::uint32_t> v1 =
+    {
+        0x0,
+        0x1,
+        0x01000000,
+        0x02000000
+    };
+    auto filter_by_first = [](const std::uint32_t &ip)
+    {
+        return ((ip & 0xFF000000) == 0x01000000);
+    };
+    auto r = filter(v1, filter_by_first);
+
+    BOOST_CHECK(r.size() == 1);
+    BOOST_CHECK(r.at(0) == 0x01000000);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -18,6 +18,7 @@ void print_ips(std::vector<std::uint32_t> &ip)
     }
 }
 
+
 int main(int argc, char const *argv[])
 {
     try
@@ -43,16 +44,34 @@ int main(int argc, char const *argv[])
             ip_pool.push_back(ip);
         }
 
-        // TODO reverse lexicographically sort
+        //reverse lexicographically sort
         std::sort(ip_pool.begin(), ip_pool.end(), std::greater<std::uint32_t>());
 
         print_ips(ip_pool);
 
-        /*auto filter_by_first_1 = [](const std::uint32_t ip)
+        auto filter_by_first = [](const std::uint32_t &ip)
         {
             return ((ip & 0xFF000000) == 0x01000000);
         };
-        std::vector<std::uint32_t> v1 = filter(ip_pool, filter_by_first_1);*/
+        auto v1 = filter(ip_pool, filter_by_first);
+        print_ips(v1);
+
+        auto filter_by_first_and_second = [](const std::uint32_t &ip)
+        {
+            return ((ip & 0xFFFF0000) == 0x2e460000);
+        };
+        auto v2 = filter(ip_pool, filter_by_first_and_second);
+        print_ips(v2);
+
+        auto filter_by_any = [](const std::uint32_t &ip)
+        {
+            return ((ip & 0xFF000000) == 0x2e000000) ||
+                   ((ip & 0xFF0000) == 0x2e0000) ||
+                   ((ip & 0xFF00) == 0x2e00) ||
+                   ((ip & 0xFF) == 0x2e);
+        };
+        auto v3 = filter(ip_pool, filter_by_any);
+        print_ips(v3);
 
         // 222.173.235.246
         // 222.130.177.64
