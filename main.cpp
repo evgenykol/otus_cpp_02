@@ -25,19 +25,7 @@ int main(int argc, char const *argv[])
     {
         std::vector<std::uint32_t> ip_pool;
 
-#ifdef NDEBUG
         for(std::string line; std::getline(std::cin, line);)
-#else
-        std::fstream f;
-        f.open("ip_filter.tsv", std::fstream::in);
-
-        if (!f.is_open())
-        {
-            std::cout << "File opening error" << std::endl;
-        }
-
-        for(std::string line; std::getline(f, line);)
-#endif
         {
             std::vector<std::string> v = split(line, '\t');
             auto ip = ip_to_int(split(v.at(0), '.'));
