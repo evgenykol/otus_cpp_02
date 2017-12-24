@@ -25,7 +25,7 @@ std::vector<std::string> split(const std::string &str, char d)
     return r;
 }
 
-std::uint32_t ip_to_int(std::vector<std::string> ip_str)
+std::uint32_t ip_to_int(const std::vector<std::string> ip_str)
 {
     std::uint32_t ip_int = 0;
     for(auto i = 0; i < 4; ++i)
@@ -35,7 +35,7 @@ std::uint32_t ip_to_int(std::vector<std::string> ip_str)
     return ip_int;
 }
 
-std::string ip_to_str(std::uint32_t ip_int)
+std::string ip_to_str(const std::uint32_t ip_int)
 {
     std::string ip_str = std::to_string((ip_int & 0xFF000000) >> 24);
     ip_str += "." + std::to_string((ip_int & 0xFF0000) >> 16);

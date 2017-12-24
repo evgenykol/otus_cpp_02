@@ -73,23 +73,58 @@ BOOST_AUTO_TEST_CASE(check_ip_to_str)
     BOOST_CHECK(ip_to_str(0xdeadebf6) == "222.173.235.246");
 }
 
-BOOST_AUTO_TEST_CASE(check_filter)
+BOOST_AUTO_TEST_CASE(check_filter_one)
 {
     std::vector<std::uint32_t> v1 =
     {
         0x0,
         0x1,
         0x01000000,
-        0x02000000
+        0x02000000,
+        0x01abcdef
     };
-    auto filter_by_first = [](const std::uint32_t &ip)
+
+    auto r = filter(v1, 1);
+
+    BOOST_CHECK(r.size() == 2);
+    BOOST_CHECK(r.at(0) == 0x01000000);
+    BOOST_CHECK(r.at(1) == 0x01abcdef);
+}
+
+BOOST_AUTO_TEST_CASE(check_filter_two)
+{
+    std::vector<std::uint32_t> v1 =
     {
-        return ((ip & 0xFF000000) == 0x01000000);
+        0x0,
+        0x1,
+        0x01000000,
+        0x02000000,
+        0x01abcdef
     };
-    auto r = filter(v1, filter_by_first);
+
+    auto r = filter(v1, 1, 0);
 
     BOOST_CHECK(r.size() == 1);
     BOOST_CHECK(r.at(0) == 0x01000000);
+}
+
+BOOST_AUTO_TEST_CASE(check_filter_any)
+{
+    std::vector<std::uint32_t> v1 =
+    {
+        0x0,
+        0x1,
+        0x01000000,
+        0x02000000,
+        0x01abcdef
+    };
+
+    auto r = filter_any(v1, 1);
+
+    BOOST_CHECK(r.size() == 3);
+    BOOST_CHECK(r.at(0) == 0x1);
+    BOOST_CHECK(r.at(1) == 0x01000000);
+    BOOST_CHECK(r.at(2) == 0x01abcdef);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

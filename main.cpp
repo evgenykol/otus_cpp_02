@@ -5,12 +5,12 @@
 #include <vector>
 #include <fstream>
 #include <cassert>
-#include <tuple>
-#include <algorithm>
+#include <array>
+
 
 #include "ip_filter.h"
 
-void print_ips(std::vector<std::uint32_t> &ip)
+void print_ips(const std::vector<std::uint32_t> &ip)
 {
     for(auto i : ip)
     {
@@ -19,13 +19,26 @@ void print_ips(std::vector<std::uint32_t> &ip)
 }
 
 
+
 int main(int argc, char const *argv[])
 {
     try
     {
         std::vector<std::uint32_t> ip_pool;
 
+#ifdef NDEBUG
         for(std::string line; std::getline(std::cin, line);)
+#else
+        std::fstream f;
+        f.open("ip_filter.tsv", std::fstream::in);
+
+        if (!f.is_open())
+        {
+            std::cout << "File opening error" << std::endl;
+        }
+
+        for(std::string line; std::getline(f, line);)
+#endif
         {
             std::vector<std::string> v = split(line, '\t');
             auto ip = ip_to_int(split(v.at(0), '.'));
@@ -35,30 +48,21 @@ int main(int argc, char const *argv[])
         //reverse lexicographically sort
         std::sort(ip_pool.begin(), ip_pool.end(), std::greater<std::uint32_t>());
 
-        print_ips(ip_pool);
+        //print_ips(ip_pool);
 
-        auto filter_by_first = [](const std::uint32_t &ip)
-        {
-            return ((ip & 0xFF000000) == 0x01000000);
-        };
-        auto v1 = filter(ip_pool, filter_by_first);
+        std::cout << std::endl;
+
+        auto v1 = filter(ip_pool, 1);
         print_ips(v1);
 
-        auto filter_by_first_and_second = [](const std::uint32_t &ip)
-        {
-            return ((ip & 0xFFFF0000) == 0x2e460000);
-        };
-        auto v2 = filter(ip_pool, filter_by_first_and_second);
+        std::cout << std::endl;
+
+        auto v2 = filter(ip_pool, 46, 70);
         print_ips(v2);
 
-        auto filter_by_any = [](const std::uint32_t &ip)
-        {
-            return ((ip & 0xFF000000) == 0x2e000000) ||
-                   ((ip & 0xFF0000) == 0x2e0000) ||
-                   ((ip & 0xFF00) == 0x2e00) ||
-                   ((ip & 0xFF) == 0x2e);
-        };
-        auto v3 = filter(ip_pool, filter_by_any);
+        std::cout << std::endl;
+
+        auto v3 = filter_any(ip_pool, 46);
         print_ips(v3);
 
         // 222.173.235.246
